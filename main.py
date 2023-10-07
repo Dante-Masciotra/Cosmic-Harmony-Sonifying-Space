@@ -4,6 +4,7 @@ import numpy as np
 # Replace 'your_video.mp4' with the path to your video file
 video_path = 'Data/Cosmic Reef [1280 X 720].mp4'
 cap = cv2.VideoCapture(video_path)
+average_colors = []
 
 while True:
     # Read the next frame from the video
