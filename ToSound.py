@@ -1,8 +1,7 @@
-import cv2
 import numpy as np
-import mido
 from mido import MidiFile, MidiTrack, Message
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
+import subprocess
 
 # Read the list of average colors from the text file
 average_colors = []
@@ -22,12 +21,12 @@ track_green = MidiTrack()
 midi_file.tracks.extend([track_blue,track_red,track_green])
 
 # Define MIDI note numbers corresponding to the desired pitch range
-min_note = 60  # MIDI note number for C4
-max_note = 96  # MIDI note number for C7
+min_note = 20  # MIDI note number for C4
+max_note = 107  # MIDI note number for C7
 
 # Define program numbers (patch numbers) for each instrument
 program_blue = 16    # Acoustic Grand Piano
-program_red = 25  # Saxophone
+program_red = 42  # Saxophone
 program_green = 69 # Standard MIDI drum kit (High Q)
 
 # Initialize variables to track the current note and its duration for each channel
@@ -74,10 +73,16 @@ blue_values = [color[2] for color in average_colors]
 red_values = [color[0] for color in average_colors]
 green_values = [color[1] for color in average_colors]
 
-plt.plot(blue_values, label='Blue Channel')
-plt.plot(red_values, label='Red Channel')
-plt.plot(green_values, label='Green Channel')
-plt.xlabel('Frame')
-plt.ylabel('Channel Value')
-plt.legend()
-plt.show()
+
+# Specify the input MIDI file and output WAV file
+input_midi_file = "output_music.mid"
+output_wav_file = "output_music.wav"
+
+# Convert the MIDI file to WAV using timidity
+try:
+    subprocess.run(["timidity", input_midi_file, "-Ow", "-o", output_wav_file], check=True)
+    print(f"Conversion completed: {input_midi_file} -> {output_wav_file}")
+except subprocess.CalledProcessError:
+    print("Error: MIDI to WAV conversion failed.")
+
+
