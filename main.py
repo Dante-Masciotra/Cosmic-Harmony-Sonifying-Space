@@ -1,7 +1,8 @@
 import cv2
 import numpy as np
 # Replace 'your_video.mp4' with the path to your video file
-cap = cv2.VideoCapture('your_video.mp4')
+video_path = 'Data/Cosmic Reef [1280 X 720].mp4'
+cap = cv2.VideoCapture(video_path)
 
 while True:
     # Read the next frame from the video
@@ -23,7 +24,7 @@ while True:
     cv2.imshow('Cropped Section', cropped_section)
 
     # Break the loop if the user presses the 'q' key
-    if cv2.waitKey(1) & 0xFF == ord('q'):
+    if cv2.waitKey(30) & 0xFF == ord('q'):
         break
 
 # Release the video capture object and close all windows
