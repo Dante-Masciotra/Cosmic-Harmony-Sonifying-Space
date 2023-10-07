@@ -14,3 +14,9 @@ midi_file = 'input.mid'
 soundfont = 'path/to/GeneralUser GS.sf2'
 mp3_file = 'output.mp3'
 midi_to_mp3(midi_file, soundfont, mp3_file)
+
+#Replace 'input.mid', 'path/to/GeneralUser GS.sf2', and 'output.mp3' with the appropriate file paths. 
+# This script will convert the specified MIDI file to MP3 using the specified SoundFont.
+
+#SoundFont files contain samples of musical instruments, and are required by fluidsynth 
+# to generate audio from MIDI. A popular free SoundFont is GeneralUser GS, which can be downloaded from the schristiancollins website.
