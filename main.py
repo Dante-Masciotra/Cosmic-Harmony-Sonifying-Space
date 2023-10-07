@@ -9,7 +9,7 @@ average_colors = []
 while True:
     # Read the next frame from the video
     ret, frame = cap.read()
-    
+
     # Break the loop if we've reached the end of the video
     if not ret:
         break
@@ -18,19 +18,15 @@ while True:
     x, y, width, height = 640, 360, 75, 75
     cropped_section = frame[y:y+height, x:x+width]
 
-
     # Get the average color of the cropped section
     avg_color = np.mean(cropped_section, axis=(0, 1)).astype(int)
-    
-    # Append the average color to the list
+
+    # Append the average color (in RGB format) to the list
     average_colors.append(avg_color)
 
     # Display the original frame and the cropped section
     cv2.imshow('Original Frame', frame)
     cv2.imshow('Cropped Section', cropped_section)
-
-    
-
 
     # Break the loop if the user presses the 'q' key
     if cv2.waitKey(1) & 0xFF == ord('q'):
@@ -40,7 +36,7 @@ while True:
 cap.release()
 cv2.destroyAllWindows()
 
-# Write the list of average colors to a text file
+# Write the list of average colors in RGB format to a text file
 with open('average_colors.txt', 'w') as file:
     for color in average_colors:
-        file.write(f'{color}\n')
+        file.write(f'RGB: {color[2]}, {color[1]}, {color[0]}\n')
