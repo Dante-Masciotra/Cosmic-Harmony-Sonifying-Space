@@ -1,14 +1,16 @@
 from moviepy.editor import VideoFileClip
 from moviepy.audio.io.AudioFileClip import AudioFileClip
 
-# Load the MP4 video
-video_clip = VideoFileClip("Data/Cosmic Reef [1280 X 720].mp4")
+def mpFileMerger(video: str):
 
-# Load the MP3 audio
-audio_clip = AudioFileClip("Output/output_music.wav")
+    # Load the MP4 video
+    video_clip = VideoFileClip(video)
 
-# Set the audio of the video to the loaded MP3 audio
-video_clip = video_clip.set_audio(audio_clip)
+    # Load the MP3 audio
+    audio_clip = AudioFileClip("Output/output_music.wav")
 
-# Write the result to a new MP4 file
-video_clip.write_videofile("Output/output_video.mp4", codec="libx264")
+    # Set the audio of the video to the loaded MP3 audio
+    video_clip = video_clip.set_audio(audio_clip)
+
+    # Write the result to a new MP4 file
+    video_clip.write_videofile("Output/output_video.mp4", codec="libx264")
