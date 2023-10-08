@@ -11,7 +11,7 @@ from mpFileMerger import *
 import tkinter as tk
 
 video_path = "Data\Cosmic Reef [1280 X 720].mp4"
-box_x, box_y, box_size = 20, 40, 175
+box_x, box_y = 20, 40
 loading_message = None
 pygame_running = True
 
@@ -44,7 +44,7 @@ def execute_program(screen):
 
 
 def open_coordinate_selector(rad):
-    global box_x, box_y, pygame_running
+    global box_x, box_y, pygame_running, box_size
     box_size = rad
     pygame.init()
 
