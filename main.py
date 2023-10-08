@@ -114,6 +114,9 @@ def show_play_button():
     label.pack_forget()
     square.pack_forget()
     play_button.pack() 
+    play_button.place(x=175, y=133)
+    label3 = tk.Label(app, text="Thank you for using our Program, enjoy the sonnification :)")
+    label3.pack()
 
 def play_video():
     global video_clip
@@ -144,5 +147,6 @@ submit_button.pack()
 play_button = tk.Button(app, text="Play Video", command=play_video)
 play_button.pack()
 play_button.pack_forget() 
+
 
 app.mainloop()
