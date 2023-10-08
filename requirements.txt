@@ -1,7 +1,0 @@
-opencv-python 
-numpy
-mido
-python-rtmidi
-matplotlib
-midi2audio
-pydub

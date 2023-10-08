@@ -5,7 +5,7 @@ from moviepy.audio.io.AudioFileClip import AudioFileClip
 video_clip = VideoFileClip("Data/Cosmic Reef [1280 X 720].mp4")
 
 # Load the MP3 audio
-audio_clip = AudioFileClip("output_music.wav")
+audio_clip = AudioFileClip("Sounds/output_music.wav")
 
 # Set the audio of the video to the loaded MP3 audio
 video_clip = video_clip.set_audio(audio_clip)
