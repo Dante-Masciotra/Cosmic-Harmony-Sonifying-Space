@@ -5,3 +5,6 @@ python-rtmidi
 matplotlib
 midi2audio
 pydub
+pygame
+fluidsynth
+moviepy
