@@ -1,6 +1,7 @@
 import pygame
 import sys
 from pygame.locals import *
+import cv2  # Import OpenCV
 from PIL import Image
 from moviepy.editor import VideoFileClip
 from GetRGB import *
@@ -10,19 +11,17 @@ from mpFileMerger import *
 # Define global variables
 rendered_video_path = "Output/output_video.mp4"
 box_x, box_y, box_size = 20, 40, 175
-loading_message = ""
+loading_message = None
 
 def execute_program(screen):
     global loading_message
-    # clear_screen(screen)  # Clear the screen before displaying the loading message
-    loading_message = "Loading..."
-    pygame.display.update()
-
+    loading_message = "Executing program..."
+    pygame.display.update()  # Update the display to show the loading message
 
     # Add your code here to execute the program with the selected coordinates
     print(f"Executing program with coordinates - X: {box_x}, Y: {box_y}, Size: {box_size}")
     # Step 1: Run video file, looking at just a small square in the centre, output the average colour of every frame in that square
-    GetRGB(video= 'Data/Cosmic Reef [1280 X 720].mp4', x_coord= box_x, y_coord= box_y, width_height= box_size)
+    GetRGB(video='Data/Cosmic Reef [1280 X 720].mp4', x_coord=box_x, y_coord=box_y, width_height=box_size)
 
     # Step 2: Convert those RGB values into a midi file, then convert the midi file into a WAV
     ToSound(soundfile="Touhou.sf2")
@@ -30,12 +29,13 @@ def execute_program(screen):
     # Step 3: Combine the WAV and original MP4 for a final video + audio file
     mpFileMerger(video='Data/Cosmic Reef [1280 X 720].mp4')
 
-    pygame.display.quit()
-    pygame.quit()
-    sys.exit()
+    loading_message = "Execution complete!"
+    pygame.display.update()  # Update the display to show the completion message
+    pygame.time.delay(2000)  # Add a delay to keep the completion message visible for 2 seconds
+    loading_message = None  # Clear the loading message
 
 def open_coordinate_selector():
-    global box_x, box_y, box_size
+    global box_x, box_y, box_size, loading_message
     pygame.init()
 
     try:
@@ -46,13 +46,17 @@ def open_coordinate_selector():
         screen = pygame.display.set_mode((screen_width, screen_height))
         pygame.display.set_caption("Select Coordinates")
 
-        frame = video_clip.get_frame(0)
-        frame_rgb = (frame * 255).astype('uint8')[..., ::-1]
+        cap = cv2.VideoCapture(rendered_video_path)  # Open the video using OpenCV
 
-        # Convert the thumbnail to RGB mode explicitly
-        thumbnail = Image.fromarray(frame_rgb).convert('RGB')
+        # Capture the first frame to create a thumbnail
+        ret, frame = cap.read()
+        if ret:
+            frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)  # Convert to RGB
+            thumbnail = Image.fromarray(frame_rgb)
+            thumbnail = pygame.image.fromstring(thumbnail.tobytes(), thumbnail.size, thumbnail.mode)
+        else:
+            thumbnail = pygame.Surface((video_width, video_height))
 
-        thumbnail = pygame.image.fromstring(thumbnail.tobytes(), thumbnail.size, thumbnail.mode)
         thumbnail_rect = thumbnail.get_rect(center=(video_width // 2 + 20, video_height // 2 + 40))
     except Exception as e:
         print(f"Error rendering thumbnail: {str(e)}")
@@ -82,8 +86,8 @@ def open_coordinate_selector():
                 if thumbnail_rect.collidepoint(event.pos):
                     x, y = event.pos
                     # Ensure that the red box stays within the thumbnail bounds
-                    box_x = max(20, min(x - box_size // 2, video_width - box_size+20))
-                    box_y = max(40, min(y - box_size // 2, video_height - box_size+40))
+                    box_x = max(20, min(x - box_size // 2, video_width - box_size + 20))
+                    box_y = max(40, min(y - box_size // 2, video_height - box_size + 40))
                     snapping = True
                 elif input_box.collidepoint(event.pos):
                     color = color_active
@@ -107,7 +111,15 @@ def open_coordinate_selector():
                 else:
                     text += event.unicode
 
-        screen.fill((255, 255, 255))
+        screen.fill((0, 0, 0))  # Fill the screen with black
+
+        # Draw the loading message if it's present
+        if loading_message is not None:
+            loading_font = pygame.font.Font(None, 36)
+            loading_text = loading_font.render(loading_message, True, (255, 255, 255))
+            loading_text_rect = loading_text.get_rect(center=(screen_width // 2, screen_height // 2))
+            screen.blit(loading_text, loading_text_rect)
+
         screen.blit(thumbnail, thumbnail_rect)
 
         # Draw the draggable rectangle
@@ -115,7 +127,7 @@ def open_coordinate_selector():
 
         # Draw the custom input box
         pygame.draw.rect(screen, color, input_box, 2)
-        input_text = font.render(text, True, (0, 0, 0))
+        input_text = font.render(text, True, (255, 255, 255))
 
         screen.blit(input_text, (input_box.x + 5, input_box.y + 5))
 
@@ -127,7 +139,8 @@ def open_coordinate_selector():
                 type_line_visible = not type_line_visible
 
         if type_line_visible and color == color_active:
-            pygame.draw.line(screen, (0, 0, 0), (input_box.x + 5 + input_text.get_width(), input_box.y + 5), (input_box.x + 5 + input_text.get_width(), input_box.y + 5 + input_box.height), 2)
+            pygame.draw.line(screen, (0, 0, 0), (input_box.x + 5 + input_text.get_width(), input_box.y + 5),
+                             (input_box.x + 5 + input_text.get_width(), input_box.y + 5 + input_box.height), 2)
 
         # Add an "Execute" button
         execute_button = pygame.Rect(250, screen_height - 40, 100, 30)
@@ -140,17 +153,8 @@ def open_coordinate_selector():
         if event.type == MOUSEBUTTONDOWN and execute_button.collidepoint(event.pos):
             execute_program(screen)
 
-        # Display loading message
-        if loading_message:
-            loading_font = pygame.font.Font(None, 32)
-            loading_text = loading_font.render(loading_message, True, (0, 0, 0))
-            screen.blit(loading_text, (10, 10))
-
         pygame.display.flip()
         clock.tick(30)
-
-def clear_screen(screen):
-    screen.fill((255, 255, 255))  # Fill the screen with white
 
 if __name__ == "__main__":
     open_coordinate_selector()
