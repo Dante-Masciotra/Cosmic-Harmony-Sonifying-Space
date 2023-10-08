@@ -78,5 +78,3 @@ try:
     print(f"Conversion completed: {input_midi_file} -> {output_wav_file}")
 except subprocess.CalledProcessError:
     print("Error: MIDI to WAV conversion failed.")
-
-
