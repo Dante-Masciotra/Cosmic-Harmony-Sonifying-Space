@@ -4,7 +4,7 @@ import subprocess
 
 # Read the list of average colors from the text file
 average_colors = []
-with open('Text/average_colors.txt', 'r') as file:
+with open('Output/average_colors.txt', 'r') as file:
     for line in file:
         # Split the line into individual RGB values and convert them to integers
         r, g, b = map(int, line.strip('RGB: \n').split(', '))
@@ -65,12 +65,12 @@ for i in range(len(current_notes)):
         track.append(Message('note_off', note=current_notes[i], velocity=velocity, time=current_durations[i]))
 
 # Save the MIDI file
-midi_file.save('Sounds/output_music.mid')
+midi_file.save('Output/output_music.mid')
 
 # Specify the input MIDI file and output WAV file
-input_midi_file = "Sounds/output_music.mid"
-output_wav_file = "Sounds/output_music.wav"
-soundfont_file = "Text/Touhou.sf2"  # Replace with the path to your SoundFont file
+input_midi_file = "Output/output_music.mid"
+output_wav_file = "Output/output_music.wav"
+soundfont_file = "Sounds/Touhou.sf2"  # Replace with the path to your SoundFont file
 
 # Convert the MIDI file to WAV using FluidSynth
 try:

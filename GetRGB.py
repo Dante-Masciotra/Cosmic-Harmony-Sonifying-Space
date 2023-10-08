@@ -37,6 +37,7 @@ cap.release()
 cv2.destroyAllWindows()
 
 # Write the list of average colors in RGB format to a text file
-with open('Text/average_colors.txt', 'w') as file:
+output ='Output/average_colors.txt'
+with open(output, 'w') as file:
     for color in average_colors:
         file.write(f'RGB: {color[2]}, {color[1]}, {color[0]}\n')
