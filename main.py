@@ -129,6 +129,7 @@ def quit_pygame():
     
 def show_play_button():
     label2.pack_forget()
+    XY_button.pack_forget()
     submit_button.pack_forget()
     label.pack_forget()
     square.pack_forget()
@@ -153,8 +154,8 @@ square = tk.Entry(app)
 square.insert(0, 175)
 square.pack()
 
-submit_button = tk.Button(app, text="Set X and Y Cords", command=lambda: open_coordinate_selector(rad=int(square.get())))
-submit_button.pack()
+XY_button = tk.Button(app, text="Set X and Y Cords", command=lambda: open_coordinate_selector(rad=int(square.get())))
+XY_button.pack()
 
 label2 = tk.Label(app, text="Play Video")
 label2.pack()
