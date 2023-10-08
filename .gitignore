@@ -160,6 +160,8 @@ Touhou.sf2
 
 output_music.mid
 output_music.wav
+output_video.mp4
+
 # PyCharm
 #  JetBrains specific template is maintained in a separate JetBrains.gitignore that can
 #  be found at https://github.com/github/gitignore/blob/main/Global/JetBrains.gitignore
