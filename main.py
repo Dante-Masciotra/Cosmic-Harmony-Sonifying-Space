@@ -9,7 +9,7 @@ from ToSound import *
 from mpFileMerger import *
 
 # Define global variables
-rendered_video_path = "Output/output_video.mp4"
+video_path = "Data/Cosmic Reef [1920 X 1080].mp4"
 box_x, box_y, box_size = 20, 40, 175
 loading_message = None
 
@@ -28,31 +28,33 @@ def execute_program(screen):
     # Add your code here to execute the program with the selected coordinates
     print(f"Executing program with coordinates - X: {box_x}, Y: {box_y}, Size: {box_size}")
     
-    GetRGB(video='Data/Cosmic Reef [1280 X 720].mp4', x_coord=box_x, y_coord=box_y, width_height=box_size)
+    GetRGB(video=video_path, x_coord=box_x, y_coord=box_y, width_height=box_size)
 
     # Step 2: Convert those RGB values into a midi file, then convert the midi file into a WAV
     ToSound(soundfile="Touhou.sf2")
 
     # Step 3: Combine the WAV and original MP4 for a final video + audio file
-    mpFileMerger(video='Data/Cosmic Reef [1280 X 720].mp4')
+    mpFileMerger(video=video_path)
 
     pygame.display.quit()
     pygame.quit()
     sys.exit()
-    
+
 def open_coordinate_selector():
     global box_x, box_y, box_size, loading_message
     pygame.init()
 
     try:
-        video_clip = VideoFileClip(rendered_video_path)
+        video_clip = VideoFileClip(video_path)
         video_width, video_height = video_clip.size
+        print(video_width)
+        box_x, box_y= (video_width/2)-20, (video_height/2)-40
         screen_width = video_width + 40
         screen_height = video_height + 90
         screen = pygame.display.set_mode((screen_width, screen_height))
         pygame.display.set_caption("Select Coordinates")
 
-        cap = cv2.VideoCapture(rendered_video_path)
+        cap = cv2.VideoCapture(video_path)
 
         ret, frame = cap.read()
         if ret:
