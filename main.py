@@ -2,6 +2,7 @@ import pygame
 import sys
 from pygame.locals import *
 import cv2
+import os
 from PIL import Image
 from moviepy.editor import VideoFileClip
 from GetRGB import *
@@ -9,7 +10,7 @@ from ToSound import *
 from mpFileMerger import *
 
 # Define global variables
-video_path = "Data/Cosmic Reef [1280 X 720].mp4"
+video_path = "Data\Cosmic Reef [1280 X 720].mp4"
 box_x, box_y, box_size = 20, 40, 175
 loading_message = None
 
@@ -20,7 +21,22 @@ button_hover_color = (0, 160, 0)
 text_box_color = (100, 100, 100)
 text_color = (255, 255, 255)
 
+def file_select():
+
+    # Use the 'USERPROFILE' environment variable to reference the user's profile folder
+    user_profile = os.environ['USERPROFILE']
+
+    # Set the initial directory to a subdirectory in the user's profile folder (you can change this)
+    initial_dir = os.path.join(user_profile, 'Videos')
+
+    # Use the 'explorer' command to open the File Explorer
+    try:
+        subprocess.Popen(['explorer', initial_dir])
+    except Exception as e:
+        print(f"Error opening File Explorer: {e}")
+
 def execute_program(screen):
+
     global loading_message
     loading_message = "Executing program..."
     pygame.display.update()
@@ -148,6 +164,18 @@ def open_coordinate_selector():
         execute_font = pygame.font.Font(None, 24)
         execute_text = execute_font.render("Execute", True, (255, 255, 255))
         screen.blit(execute_text, (execute_button.x + 15, execute_button.y + 5))
+
+        # Add a styled "File Select" button
+        file_button = pygame.Rect(450, screen_height - 40, 125, 30)
+        pygame.draw.rect(screen, button_color, file_button, 0)
+        pygame.draw.rect(screen, (0, 0, 0), file_button, 2)  # Border for the button
+        file_font = pygame.font.Font(None, 24)
+        file_text = file_font.render("Select a File", True, (255, 255, 255))
+        screen.blit(file_text, (file_button.x + 15, file_button.y + 5))
+
+        # Check if the "Execute" button is clicked
+        if event.type == MOUSEBUTTONDOWN and file_button.collidepoint(event.pos):
+            file_select()
 
         # Check if the "Execute" button is clicked
         if event.type == MOUSEBUTTONDOWN and execute_button.collidepoint(event.pos):
