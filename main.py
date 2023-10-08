@@ -9,7 +9,7 @@ from ToSound import *
 from mpFileMerger import *
 
 # Define global variables
-video_path = "Data/Cosmic Reef [1920 X 1080].mp4"
+video_path = "Data/Cosmic Reef [1280 X 720].mp4"
 box_x, box_y, box_size = 20, 40, 175
 loading_message = None
 
