@@ -1,6 +1,5 @@
 import numpy as np
 from mido import MidiFile, MidiTrack, Message
-# import matplotlib.pyplot as plt
 import subprocess
 
 # Read the list of average colors from the text file
@@ -18,16 +17,16 @@ midi_file = MidiFile()
 track_blue = MidiTrack()
 track_red = MidiTrack()
 track_green = MidiTrack()
-midi_file.tracks.extend([track_blue,track_red,track_green])
+midi_file.tracks.extend([track_blue, track_red, track_green])
 
 # Define MIDI note numbers corresponding to the desired pitch range
 min_note = 20  # MIDI note number for C4
 max_note = 107  # MIDI note number for C7
 
 # Define program numbers (patch numbers) for each instrument
-program_blue = 16    # Acoustic Grand Piano
+program_blue = 16  # Acoustic Grand Piano
 program_red = 42  # Saxophone
-program_green = 69 # Standard MIDI drum kit (High Q)
+program_green = 69  # Standard MIDI drum kit (High Q)
 
 # Initialize variables to track the current note and its duration for each channel
 current_notes = [None, None, None]
@@ -36,13 +35,13 @@ current_durations = [0, 0, 0]
 # Normalize the color channels to the range [0, 1] and map them to MIDI notes
 for color in average_colors:
     blue_normalized = color[2] / 255.0  # Normalize blue channel
-    red_normalized = color[0] / 255.0   # Normalize red channel
-    green_normalized = color[1] / 255.0 # Normalize green channel
-    
+    red_normalized = color[0] / 255.0  # Normalize red channel
+    green_normalized = color[1] / 255.0  # Normalize green channel
+
     notes = [int(min_note + (max_note - min_note) * blue_normalized),
              int(min_note + (max_note - min_note) * red_normalized),
              int(min_note + (max_note - min_note) * green_normalized)]
-    
+
     velocity = 64  # Set the velocity (volume) of the note
 
     # Assign program change and notes for each channel
@@ -68,21 +67,14 @@ for i in range(len(current_notes)):
 # Save the MIDI file
 midi_file.save('output_music.mid')
 
-# Optionally, plot the blue, red, and green channel values for visualization
-blue_values = [color[2] for color in average_colors]
-red_values = [color[0] for color in average_colors]
-green_values = [color[1] for color in average_colors]
-
-
 # Specify the input MIDI file and output WAV file
 input_midi_file = "output_music.mid"
 output_wav_file = "output_music.wav"
+soundfont_file = "Touhou.sf2"  # Replace with the path to your SoundFont file
 
-# Convert the MIDI file to WAV using timidity
+# Convert the MIDI file to WAV using FluidSynth
 try:
-    subprocess.run(["timidity", input_midi_file, "-Ow", "-o", output_wav_file], check=True)
+    subprocess.run(["fluidsynth", "-T", "wav", soundfont_file, input_midi_file, "-F", output_wav_file], check=True)
     print(f"Conversion completed: {input_midi_file} -> {output_wav_file}")
 except subprocess.CalledProcessError:
     print("Error: MIDI to WAV conversion failed.")
-
-
