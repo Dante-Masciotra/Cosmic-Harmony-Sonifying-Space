@@ -1,6 +1,5 @@
 import numpy as np
 from mido import MidiFile, MidiTrack, Message
-# import matplotlib.pyplot as plt
 import subprocess
 
 # Read the list of average colors from the text file
@@ -73,11 +72,9 @@ input_midi_file = "output_music.mid"
 output_wav_file = "output_music.wav"
 soundfont_file = "Touhou.sf2"  # Replace with the path to your SoundFont file
 
-# Convert the MIDI file to WAV using timidity
+# Convert the MIDI file to WAV using FluidSynth
 try:
-    subprocess.run(["timidity", input_midi_file, "-Ow", "-o", output_wav_file], check=True)
+    subprocess.run(["fluidsynth", "-T", "wav", soundfont_file, input_midi_file, "-F", output_wav_file], check=True)
     print(f"Conversion completed: {input_midi_file} -> {output_wav_file}")
 except subprocess.CalledProcessError:
     print("Error: MIDI to WAV conversion failed.")
-
-
