@@ -7,7 +7,7 @@ def GetRGB(video: str, x_coord: int, y_coord: int, width_height: int):
     video_path = video
     cap = cv2.VideoCapture(video_path)
     average_colors = []
-
+    flag=True
     while True:
         # Read the next frame from the video
         ret, frame = cap.read()
@@ -27,22 +27,26 @@ def GetRGB(video: str, x_coord: int, y_coord: int, width_height: int):
         average_colors.append(avg_color)
 
         # Display the original frame and the cropped section
-        cv2.imshow('Original Frame', frame)
-        cv2.imshow('Cropped Section', cropped_section)
+        # cv2.imshow('Original Frame', frame)
+        # cv2.imshow('Cropped Section', cropped_section)
+        if flag:
+            print('Loading')
+            flag=False
 
         # Break the loop if the user presses the 'q' key
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
 
         # Release the video capture object and close all windows
-        cap.release()
-        cv2.destroyAllWindows()
+    cap.release()
+    cv2.destroyAllWindows()
+    print('Complete')
 
-        # Write the list of average colors in RGB format to a text file
-        output ='Output/average_colors.txt'
-        with open(output, 'w') as file:
-            for color in average_colors:
-                file.write(f'RGB: {color[2]}, {color[1]}, {color[0]}\n')
+    # Write the list of average colors in RGB format to a text file
+    output ='Output/average_colors.txt'
+    with open(output, 'w') as file:
+        for color in average_colors:
+            file.write(f'RGB: {color[2]}, {color[1]}, {color[0]}\n')
 
 
 if __name__ == '__main__':
