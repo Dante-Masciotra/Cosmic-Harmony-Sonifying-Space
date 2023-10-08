@@ -49,10 +49,13 @@ def execute_program(screen):
 
     # Step 3: Combine the WAV and original MP4 for a final video + audio file
     mpFileMerger(video=video_path)
+    
+    show_play_button()
 
     pygame_running = False  # Set Pygame to exit
     pygame.quit()  # Close the Pygame window
-    sys.exit()  # Exit the application
+    
+
 
 def open_coordinate_selector(rad):
     global box_x, box_y, pygame_running
@@ -123,6 +126,22 @@ def quit_pygame():
     pygame_running = False
     pygame.quit()  # Close the Pygame window
     # sys.exit()  # Exit the application
+    
+def show_play_button():
+    label2.pack_forget()
+    submit_button.pack_forget()
+    label.pack_forget()
+    square.pack_forget()
+    play_button.pack()  # Show the "Play Video" button after rendering is complete
+
+def play_video():
+    global video_clip
+    
+    video_clip = VideoFileClip("Output/output_video.mp4")
+
+    # Play the video using the default video player (requires a GUI environment)
+    video_clip.preview()
+    sys.exit()
 
 app = tk.Tk()
 app.title("Sonification of Space Environments.")
@@ -142,5 +161,9 @@ label2.pack()
 
 submit_button = tk.Button(app, text="Submit", command=lambda: execute_program(int(square.get())))
 submit_button.pack()
+
+play_button = tk.Button(app, text="Play Video", command=play_video)
+play_button.pack()
+play_button.pack_forget()  # Initially hide the "Play Video" butto
 
 app.mainloop()
