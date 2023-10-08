@@ -5,4 +5,3 @@ python-rtmidi
 matplotlib
 midi2audio
 pydub
-subprocess
